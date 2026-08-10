@@ -1,0 +1,547 @@
+/* ==========================================
+   READER.CSS - PART 1
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:"Merriweather",serif;
+
+    background:#d9d2c3;
+
+    color:#2b2b2b;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================
+   READER CONTAINER
+========================================== */
+
+.reader-container{
+
+    width:100vw;
+
+    height:100vh;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+/* ==========================================
+   PAGE SLIDER
+========================================== */
+
+.page-slider{
+
+    display:flex;
+
+    width:300vw;
+
+    height:100vh;
+
+    transition:transform .45s ease;
+
+}
+
+/* ==========================================
+   SINGLE PAGE
+========================================== */
+
+.page{
+
+    width:100vw;
+
+    height:100vh;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    align-items:flex-start;
+
+    background:#efe7d5;
+
+    overflow-y:auto;
+
+}
+
+/* ==========================================
+   PAPER
+========================================== */
+
+.page-content{
+
+    width:90%;
+
+    max-width:760px;
+
+    min-height:88vh;
+    
+    height:auto;
+
+    margin:40px auto;
+
+    background:#fcf8ef;
+
+    padding:55px;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.18);
+
+    position:relative;
+
+}
+
+/* ==========================================
+   CHAPTER TITLE
+========================================== */
+
+.chapter-title{
+
+    text-align:center;
+
+    font-size:30px;
+
+    margin-bottom:35px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================
+   STORY
+========================================== */
+
+.page-content p{
+
+    font-size:19px;
+
+    line-height:2;
+
+    margin-bottom:20px;
+
+    text-align:justify;
+
+}
+
+/* ==========================================
+   PAGE NUMBER
+========================================== */
+
+.page-number{
+
+    position:absolute;
+
+    bottom:25px;
+
+    right:35px;
+
+    color:#777;
+
+    font-size:15px;
+
+}
+
+
+
+/* ==========================================
+   READER.CSS - PART 2
+========================================== */
+
+/* Hidden Message */
+.hidden-message{
+
+    margin-top:25px;
+
+    margin-bottom:12px;
+
+    font-weight:700;
+
+    font-size:20px;
+
+
+}
+/* Writing Area */
+
+.message-box{
+
+    width:100%;
+
+    height:10px;
+
+    min-height:10px;
+
+    resize:none;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    font-family:"Merriweather",serif;
+
+    font-size:18px;
+
+    line-height:10px;
+
+    color:#2b2b2b;
+
+    padding:0;
+
+    margin:4px 0;
+
+    overflow:hidden;
+
+}
+.message-box::placeholder{
+
+    color:#999;
+
+    font-style:italic;
+
+}
+
+/* SEND (Looks Like Story Text) */
+
+.send-text{
+
+    display:inline-block;
+
+    cursor:pointer;
+
+    user-select:none;
+
+    transition:.25s;
+
+    font-size:19px;
+
+}
+
+.send-text:hover{
+
+    opacity:.55;
+
+}
+
+/* Ending */
+
+.ending{
+
+    margin-top:45px;
+
+    text-align:center;
+
+    font-size:26px;
+
+    font-style:italic;
+
+}
+
+/* Hide Navigation Buttons */
+
+.reader-navigation{
+
+    display:none;
+
+}
+
+/* Return To Library */
+
+.back-home{
+
+    position:fixed;
+
+    bottom:18px;
+
+    left:20px;
+
+    z-index:100;
+
+}
+
+.back-home a{
+
+    text-decoration:none;
+
+    color:#555;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.back-home a:hover{
+
+    color:#000;
+
+}
+
+/* Subtle Paper Texture */
+
+.page-content{
+
+    background:
+
+        radial-gradient(circle at top left,
+        rgba(255,255,255,.35),
+        transparent 35%),
+
+        radial-gradient(circle at bottom right,
+        rgba(0,0,0,.02),
+        transparent 45%),
+
+        #fcf8ef;
+
+}
+
+
+
+/* ==========================================
+   READER.CSS - PART 3
+========================================== */
+
+/* Smooth page transition */
+
+.page{
+
+    transition:transform .45s ease,
+               opacity .45s ease;
+
+}
+
+/* Make the page feel clickable */
+
+.page{
+
+    cursor:pointer;
+
+    -webkit-tap-highlight-color:transparent;
+
+}
+
+/* Smooth scrolling on touch devices */
+
+.reader-container{
+
+    touch-action:pan-y;
+
+}
+
+/* Prevent text selection while swiping */
+
+.page,
+.chapter-title,
+.page-number{
+
+    user-select:none;
+
+}
+
+/* Text can still be selected */
+
+.page-content p,
+.message-box{
+
+    user-select:text;
+
+}
+
+/* Better textarea */
+
+.message-box{
+
+    overflow:hidden;
+
+    white-space:pre-wrap;
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .page-content{
+
+        width:94%;
+
+        height:92vh;
+
+        padding:30px;
+
+        border-radius:0;
+
+    }
+
+    .chapter-title{
+
+        font-size:25px;
+
+        margin-bottom:25px;
+
+    }
+
+    .page-content p{
+
+        font-size:17px;
+
+        line-height:1.9;
+
+    }
+
+    .hidden-message{
+
+        font-size:18px;
+
+    }
+
+    .message-box{
+
+        font-size:17px;
+
+        min-height:80px;
+
+    }
+
+    .ending{
+
+        font-size:22px;
+
+    }
+
+}
+
+/* Small Phones */
+
+@media (max-width:480px){
+
+    .page-content{
+
+        padding:22px;
+
+    }
+
+    .chapter-title{
+
+        font-size:22px;
+
+    }
+
+    .page-content p{
+
+        font-size:16px;
+
+        line-height:1.8;
+
+    }
+
+    .page-number{
+
+        font-size:13px;
+
+    }
+
+}
+
+/* Fade animation */
+
+.page-content{
+
+    animation:fadeIn .4s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(10px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+.story-input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-family:"Merriweather", serif;
+    font-size:19px;
+    line-height:2;
+    padding:0;
+    margin:0;
+    color:#2b2b2b;
+}
+
+.send-text{
+    cursor:pointer;
+    display:inline;
+    font-weight:inherit;
+    font-size:inherit;
+    line-height:inherit;
+    color:inherit;
+}
+.story-text{
+    font-size:16px;
+    line-height:2;
+    margin-bottom:0px;
+    text-align:justify;
+}
+
+.send-text{
+    color:#2b2b2b;
+}
+
+.send-text:visited,
+.send-text:active,
+.send-text:focus{
+    color:#2b2b2b;
+}
+
+.send-text{
+    color:#2b2b2b !important;
+    opacity:1 !important;
+    filter:none !important;
+    -webkit-tap-highlight-color:transparent;
+    outline:none;
+}
+
+.send-text:active,
+.send-text:focus{
+    color:#2b2b2b !important;
+    opacity:1 !important;
+    filter:none !important;
+    outline:none;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes - Secret Garden</title>
+    <link rel="stylesheet" href="notes.css">
+    <script>
+const access = localStorage.getItem("libraryAccess");
+
+if (!access || Date.now() > Number(access)) {
+    localStorage.removeItem("libraryAccess");
+    window.location.href = "book38.html";
+}
+</script>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+
+
+</head>
+
+<body>
+
+
+<!-- User Selection Screen -->
+
+<div class="user-selection" id="userSelection">
+
+    <div class="garden-card">
+
+        <h1>🌿 Welcome to the Garden 🌿</h1>
+
+        <p>Who are you?</p>
+
+        <div class="user-buttons">
+
+            <button id="rishaBtn">
+                🌹 Risha
+            </button>
+
+
+            <button id="naeenBtn">
+                🌿 Naeen
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- Messenger Screen -->
+
+<div class="messenger" id="messenger" style="display:none;">
+
+    <header class="header">
+
+        <h2>🌸 our secret garden 🌸</h2>
+
+        <span id="currentUser"></span>
+<div id="presenceStatus"></div>
+
+    </header>
+
+    <main class="chat-box" id="chatBox"></main>
+
+    <footer class="input-area">
+
+        <label class="image-button">
+
+            📷
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+                hidden>
+
+        </label>
+
+        <textarea
+            id="messageInput"
+            placeholder="Write a message..."
+            rows="1"></textarea>
+
+        <button id="sendButton">
+            Send 🌿
+        </button>
+
+    </footer>
+
+</div>
+
+
+<script type="module" src="notes.js"></script>
+
+</body>
+</html>

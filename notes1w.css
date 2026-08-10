@@ -1,0 +1,247 @@
+*{
+    box-sizing: border-box;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+/* Ensure body occupies full dynamic height without outer page scrolling */
+html, body {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    background: #e8dcc3;
+    background-image: radial-gradient(#cbb890 1px, transparent 1px);
+    background-size: 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* USER SELECTION */
+.user-selection {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.garden-card {
+    background: #fff8e8;
+    width: 90%;
+    max-width: 400px;
+    padding: 35px;
+    text-align: center;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 3px solid #b89b72;
+}
+
+.garden-card h1 {
+    color: #496b3d;
+    font-size: 28px;
+}
+
+.garden-card p {
+    font-size: 20px;
+    color: #5b4636;
+}
+
+.user-buttons button {
+    display: block;
+    width: 100%;
+    margin: 15px 0;
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    background: #718c55;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.user-buttons button:hover {
+    background: #56713e;
+}
+
+/* MESSENGER CONTAINER */
+.messenger {
+    width: 100%;
+    max-width: 450px;
+    height: 95dvh;
+    max-height: 100dvh;
+    background: #fff8e8;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.messenger{
+    background-image:
+        linear-gradient(rgba(255,248,232,0.25), rgba(255,248,232,0.25)),
+        url("garden-wallpaper.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+
+.header {
+    padding: 15px;
+    text-align: center;
+    background: #718c55;
+    color: white;
+    border-bottom: 4px solid #526b3e;
+    flex-shrink: 0;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+#currentUser {
+    font-size: 13px;
+}
+
+/* CHAT AREA */
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 18px;
+}
+
+.message .name {
+    font-size: 13px;
+    color: #6b5846;
+    margin-bottom: 4px;
+}
+
+.bubble {
+    display: inline-block;
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 17px;
+    line-height: 1.4;
+}
+
+.received .bubble {
+    background: #ead9b8;
+    color: #4c3a29;
+    border-bottom-left-radius: 5px;
+}
+
+.sent {
+    text-align: right;
+}
+
+.sent .bubble {
+    background: #9caf75;
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.time {
+    font-size: 11px;
+    color: #8a7865;
+    margin-top: 3px;
+}
+
+/* INPUT AREA */
+.input-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    /* Respect mobile navigation bars and gesture handles */
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid #cbb890;
+    background: #fff3d8;
+    flex-shrink: 0;
+}
+
+#messageInput {
+    flex: 1;
+    background: #fffdf5;
+    border: 1px solid #b89b72;
+    border-radius: 15px;
+    outline: none;
+    color: #4c3a29; /* Corrected: Was #f5f2e8 (white text on white input) */
+    font-size: 16px;
+    font-family: Georgia, serif;
+    resize: none;
+    overflow-y: auto;
+    min-height: 24px;
+    max-height: 120px;
+    padding: 8px 10px;
+}
+
+#messageInput::placeholder {
+    color: #b8b0a0;
+}
+
+#messageInput::-webkit-scrollbar {
+    width: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+#sendButton {
+    background: #718c55;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 18px;
+    flex-shrink: 0;
+}
+
+.image-button {
+    font-size: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.image-button input {
+    display: none;
+}
+
+.typing {
+    font-size: 13px;
+    color: #7d6a55;
+    padding-left: 15px;
+}
+
+/* MOBILE ADJUSTMENT */
+@media(max-width: 500px) {
+    .messenger {
+        height: 100dvh;
+        border-radius: 0;
+    }
+}
+#presenceStatus{
+    font-size:12px;
+    margin-top:4px;
+    opacity:0.9;
+}
+
+.seen-status{
+
+    font-size:11px;
+
+    color:#8a7865;
+
+    margin-top:2px;
+
+}

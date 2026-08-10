@@ -1,0 +1,1102 @@
+/* =========================================================
+   SECRET GARDEN MESSENGER
+   COMPLETE notes.css
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+}
+
+
+body {
+    background: #15130e;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* =========================================================
+   USER SELECTION
+   ========================================================= */
+
+.user-selection {
+    width: 100%;
+    height: 100dvh;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #4b5635 0%,
+            #28301f 45%,
+            #11110d 100%
+        );
+}
+
+
+.garden-card {
+    width: 90%;
+    max-width: 400px;
+
+    padding: 35px;
+
+    text-align: center;
+
+    background: #fff8e8;
+
+    border-radius: 25px;
+
+    border: 3px solid #9b8052;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.5);
+}
+
+
+.garden-card h1 {
+    color: #496b3d;
+
+    font-size: 28px;
+}
+
+
+.garden-card p {
+    font-size: 20px;
+
+    color: #5b4636;
+}
+
+
+.user-buttons button {
+    display: block;
+
+    width: 100%;
+
+    margin: 15px 0;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 25px;
+
+    background: #718c55;
+
+    color: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+.user-buttons button:hover {
+    background: #56713e;
+}
+
+
+/* =========================================================
+   MAIN MESSENGER
+   ========================================================= */
+
+.messenger {
+    width: 100%;
+    max-width: 450px;
+
+    height: 100dvh;
+
+    background: #15130e;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    position: relative;
+
+    box-shadow:
+        0 0 40px rgba(0,0,0,0.65);
+}
+
+
+/* =========================================================
+   SECRET GARDEN HEADER
+   ========================================================= */
+
+/*
+   IMPORTANT:
+
+   The image itself contains:
+
+       "our secret garden"
+
+   together with the branches, flowers,
+   stone wall and lanterns.
+
+   Therefore we DO NOT create the title
+   with CSS anymore.
+
+   Only the username and active status
+   are HTML/JavaScript elements.
+*/
+
+.header {
+    position: relative;
+
+    width: 100%;
+
+    /*
+       Use the NEW wallpaper here.
+
+       Put this file beside notes.html:
+
+       secret-garden-header.png
+    */
+
+    background-image:
+        url("secret-garden-header.png");
+
+    background-size: cover;
+
+    /*
+       The title is located around the
+       center of the generated wallpaper.
+    */
+
+    background-position: center center;
+
+    background-repeat: no-repeat;
+
+    /*
+       Shorter header.
+
+       This keeps more of the actual
+       conversation visible.
+    */
+
+    height: 120px;
+
+    min-height: 120px;
+
+    padding:
+        8px
+        10px
+        12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    text-align: center;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    /*
+       Completely opaque.
+
+       The chat wallpaper cannot
+       show through this area.
+    */
+
+    background-color: #211b10;
+
+    border-bottom:
+        2px solid rgba(205,170,92,0.45);
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.65);
+
+    z-index: 10;
+}
+
+
+/* =========================================================
+   REMOVE OLD CSS-GENERATED TITLE
+   ========================================================= */
+
+/*
+   IMPORTANT:
+
+   Your old CSS used:
+
+       .header h2::after
+
+   to create:
+
+       🌸 our secret garden 🌸
+
+   We MUST disable that because the new
+   wallpaper already contains the title.
+*/
+
+
+.header h2 {
+    display: none;
+}
+
+
+.header h2::before,
+.header h2::after {
+    content: none;
+
+    display: none;
+}
+
+
+/* =========================================================
+   CURRENT USER
+   ========================================================= */
+#currentUser {
+    position: relative;
+
+    margin: 0 0 7px 0;
+
+    font-size: 13px;
+
+    line-height: 1.2;
+
+    color: #f0dfbd;
+
+    opacity: 1;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,0.95),
+        0 0 8px rgba(0,0,0,0.75);
+
+    z-index: 20;
+}
+
+
+
+/* =========================================================
+   ONLINE / LAST ACTIVE
+   ========================================================= */
+
+.header .status,
+.status {
+    position: relative;
+
+    margin: 0 0 2px 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    font-size: 10px;
+
+    line-height: 1.2;
+
+    color: #eaeaff;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,0.95),
+        0 0 8px rgba(0,0,0,0.7);
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   ONLINE DOT
+   ========================================================= */
+
+.header .status .dot,
+.status .dot {
+    width: 11px;
+
+    height: 11px;
+
+    min-width: 11px;
+
+    border-radius: 50%;
+
+    background: #8b8b8b;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 0 5px rgba(255,255,255,0.25);
+}
+
+
+/* =========================================================
+   ONLINE STATE
+   ========================================================= */
+
+.header .status.online .dot,
+.status.online .dot {
+    background: #7dff94;
+
+    box-shadow:
+        0 0 8px rgba(125,255,148,0.9),
+        0 0 16px rgba(125,255,148,0.45);
+}
+
+
+/* =========================================================
+   CHAT AREA
+   ========================================================= */
+
+.chat-box {
+    flex: 1;
+
+    min-height: 0;
+
+    padding:
+        15px
+        12px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    /*
+       Your existing painting.
+       Keep the filename you are already using.
+    */
+
+    background-image:
+        linear-gradient(
+            rgba(10,8,4,0.30),
+            rgba(10,8,4,0.30)
+        ),
+        url("garden-wallpaper.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: scroll;
+
+    scroll-behavior: smooth;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.message {
+    margin-bottom: 18px;
+
+    position: relative;
+}
+
+
+/* =========================================================
+   RECEIVED NAME
+   ========================================================= */
+
+.message .name {
+    font-size: 13px;
+
+    color: #e0cfaa;
+
+    margin-bottom: 5px;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,0.9);
+}
+
+
+/* =========================================================
+   MESSAGE BUBBLE
+   ========================================================= */
+
+.bubble {
+    display: inline-block;
+
+    max-width: 78%;
+
+    padding:
+        12px
+        16px;
+
+    border-radius: 20px;
+
+    font-size: 17px;
+
+    line-height: 1.4;
+
+    word-wrap: break-word;
+
+    overflow-wrap: anywhere;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.45);
+
+    border:
+        1px solid rgba(220,185,105,0.18);
+}
+
+
+/* =========================================================
+   RECEIVED MESSAGE
+   ========================================================= */
+
+.received .bubble {
+    background:
+        linear-gradient(
+            rgba(39,31,14,0.94),
+            rgba(45,35,15,0.94)
+        );
+
+    color: #e9d9b7;
+
+    border-bottom-left-radius: 5px;
+
+    border:
+        1px solid rgba(173,137,70,0.25);
+}
+
+
+/* =========================================================
+   SENT MESSAGE
+   ========================================================= */
+
+.sent {
+    text-align: right;
+}
+
+
+.sent .bubble {
+    background:
+        linear-gradient(
+            rgba(105,126,72,0.96),
+            rgba(92,111,61,0.96)
+        );
+
+    color: #f4e8c9;
+
+    border-bottom-right-radius: 5px;
+
+    border:
+        1px solid rgba(205,220,150,0.20);
+}
+
+
+/* =========================================================
+   MESSAGE TIME
+   ========================================================= */
+
+.time {
+    font-size: 11px;
+
+    color: #c7b995;
+
+    margin-top: 4px;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,0.9);
+}
+
+
+/* =========================================================
+   SEEN STATUS
+   ========================================================= */
+
+.seen {
+    color: #eaeaff;
+
+    font-size: 11px;
+
+    margin-left: 4px;
+
+    text-shadow:
+        0 1px 3px rgba(0,0,0,0.9);
+}
+
+
+/* =========================================================
+   INPUT AREA
+   ========================================================= */
+
+.input-area {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px;
+
+    padding-bottom:
+        calc(
+            10px +
+            env(safe-area-inset-bottom)
+        );
+
+    background:
+        linear-gradient(
+            rgba(28,23,12,0.98),
+            rgba(20,17,10,0.98)
+        );
+
+    border-top:
+        1px solid rgba(190,158,91,0.35);
+
+    flex-shrink: 0;
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   CAMERA BUTTON
+   ========================================================= */
+
+.image-button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px;
+
+    height: 48px;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            #4a432d,
+            #282315
+        );
+
+    border:
+        1px solid rgba(201,168,91,0.35);
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.5);
+}
+
+
+.image-button input {
+    display: none;
+}
+
+
+/* =========================================================
+   MESSAGE TEXTAREA
+   ========================================================= */
+
+#messageInput {
+    flex: 1;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 48px;
+
+    max-height: 120px;
+
+    padding:
+        10px
+        13px;
+
+    resize: none;
+
+    overflow-y: auto;
+
+    outline: none;
+
+    border-radius: 17px;
+
+    border:
+        1px solid rgba(190,158,91,0.35);
+
+    background:
+        #11120e;
+
+    color: #eadbbd;
+
+    font-size: 16px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    box-shadow:
+        inset 0 2px 8px rgba(0,0,0,0.45);
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+#messageInput::placeholder {
+    color: #9d927c;
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   REMOVE TEXTAREA SCROLLBAR
+   ========================================================= */
+
+#messageInput::-webkit-scrollbar {
+    width: 0;
+}
+
+
+/* =========================================================
+   SEND BUTTON
+   ========================================================= */
+
+#sendButton {
+    min-height: 48px;
+
+    padding:
+        11px
+        18px;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid rgba(210,177,94,0.30);
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            #718c55,
+            #566d3e
+        );
+
+    color: #f3e6c4;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.45);
+
+    transition:
+        transform 0.1s ease,
+        filter 0.1s ease;
+}
+
+
+#sendButton:active {
+    transform: scale(0.96);
+
+    filter: brightness(0.85);
+}
+
+
+/* =========================================================
+   TYPING INDICATOR
+   ========================================================= */
+
+.typing {
+    font-size: 13px;
+
+    color: #d1bd94;
+
+    padding-left: 15px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .messenger {
+        width: 100%;
+
+        height: 100dvh;
+
+        max-width: none;
+
+        border-radius: 0;
+    }
+
+
+    /* -----------------------------------------
+       HEADER
+       ----------------------------------------- */
+
+    .header {
+        width: 100%;
+
+        height: 165px;
+
+        min-height: 165px;
+
+        padding:
+            7px
+            8px
+            11px;
+
+        /*
+           Keep the title in the wallpaper
+           centered while showing the
+           surrounding branches.
+        */
+
+        background-position:
+            center center;
+    }
+
+
+    #currentUser {
+        font-size: 16px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .header .status,
+    .status {
+        font-size: 13px;
+
+        gap: 6px;
+    }
+
+
+    .header .status .dot,
+    .status .dot {
+        width: 10px;
+
+        height: 10px;
+
+        min-width: 10px;
+    }
+
+
+    /* -----------------------------------------
+       CHAT
+       ----------------------------------------- */
+
+    .chat-box {
+        padding:
+            14px
+            10px;
+    }
+
+
+    .bubble {
+        max-width: 82%;
+
+        font-size: 16px;
+    }
+
+
+    /* -----------------------------------------
+       INPUT
+       ----------------------------------------- */
+
+    .input-area {
+        gap: 7px;
+
+        padding-left: 8px;
+
+        padding-right: 8px;
+
+        padding-bottom:
+            calc(
+                8px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    .image-button {
+        width: 44px;
+
+        height: 44px;
+    }
+
+
+    #messageInput {
+        min-height: 44px;
+
+        font-size: 15px;
+
+        padding:
+            9px
+            11px;
+    }
+
+
+    #sendButton {
+        min-height: 44px;
+
+        padding:
+            10px
+            15px;
+
+        font-size: 15px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .header {
+        width: 100%;
+
+        /* Change height from 165px to a smaller value */
+        height: 90px;
+        min-height: 90px;
+
+        padding: 4px 8px 6px;
+
+        background-position: center center;
+    }
+    
+    /* ... rest of your mobile CSS ... */
+}
+
+
+
+    #currentUser {
+        font-size: 15px;
+    }
+
+
+    .header .status,
+    .status {
+        font-size: 12px;
+    }
+
+
+    .bubble {
+        max-width: 85%;
+
+        font-size: 15px;
+    }
+
+
+    .image-button {
+        width: 40px;
+
+        height: 40px;
+
+        font-size: 21px;
+    }
+
+
+    #sendButton {
+        padding:
+            9px
+            12px;
+
+        font-size: 14px;
+    }
+}
+
+
+/* =========================================================
+   FORCE PRESENCE STATUS — FINAL OVERRIDE
+   ========================================================= */
+
+.header {
+    color: #f3dfb5 !important;
+}
+
+
+/* Catch the actual presence element regardless of
+   whether it has .status, #presenceStatus, etc. */
+
+.header #presenceStatus,
+.header #presenceStatus *,
+.header .status,
+.header .status *,
+.header [id*="presence"],
+.header [id*="Presence"],
+.header [class*="status"],
+.header [class*="Status"] {
+    color: #f3dfb5 !important;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif !important;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,1),
+        0 0 8px rgba(0,0,0,0.95) !important;
+}
+
+
+/* Status text itself */
+
+.header #presenceStatus,
+.header .status,
+.header [id*="presence"],
+.header [id*="Presence"],
+.header [class*="status"],
+.header [class*="Status"] {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 8px !important;
+
+    font-size: 14px !important;
+
+    line-height: 1.2 !important;
+
+    opacity: 1 !important;
+
+    visibility: visible !important;
+}
+
+
+/* Status dot */
+
+.header #presenceStatus .dot,
+.header .status .dot,
+.header [class*="status"] .dot,
+.header [id*="presence"] .dot {
+    width: 11px !important;
+    height: 11px !important;
+
+    min-width: 11px !important;
+    min-height: 11px !important;
+
+    border-radius: 50% !important;
+
+    background: #7dff94 !important;
+
+    display: inline-block !important;
+
+    opacity: 1 !important;
+
+    box-shadow:
+        0 0 8px rgba(125,255,148,0.95),
+        0 0 16px rgba(125,255,148,0.55) !important;
+}
+
+
+/* Offline dot */
+
+.header #presenceStatus.offline .dot,
+.header .status.offline .dot,
+.header [class*="status"].offline .dot {
+    background: #b9b9b9 !important;
+
+    box-shadow:
+        0 0 6px rgba(255,255,255,0.45) !important;
+}
+
+
+/* =========================================================
+   FORCE SEEN INDICATOR VISIBILITY
+   ========================================================= */
+
+.seen,
+.seen-status {
+    display: inline-block !important;
+
+    visibility: visible !important;
+
+    opacity: 1 !important;
+
+    color: #e8d9b8 !important;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif !important;
+
+    font-size: 12px !important;
+
+    line-height: 1.2 !important;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,1),
+        0 0 7px rgba(0,0,0,0.95) !important;
+}
+
+
+/* If the Seen indicator contains icons/text inside it */
+
+.seen *,
+.seen-status * {
+    color: #e8d9b8 !important;
+
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,1),
+        0 0 7px rgba(0,0,0,0.95) !important;
+}
