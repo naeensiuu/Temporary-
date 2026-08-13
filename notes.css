@@ -1839,3 +1839,49 @@ body {
         0 3px 12px
         rgba(0,0,0,0.35);
 }
+
+
+/* ==============================
+   FULLSCREEN PHOTO VIEWER
+   ============================== */
+
+.photo-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.92);
+}
+
+.photo-viewer img {
+    max-width: 94vw;
+    max-height: 90vh;
+
+    object-fit: contain;
+
+    border-radius: 12px;
+}
+
+.photo-viewer-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+
+    width: 44px;
+    height: 44px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+
+    font-size: 28px;
+    line-height: 44px;
+
+    text-align: center;
+}
