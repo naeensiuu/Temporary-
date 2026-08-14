@@ -129,7 +129,11 @@ function isMyMessage(data) {
 // RENDER MESSAGE
 // ==============================
 
-function renderMessage(data, messageId) {
+function renderMessage(
+    data,
+    messageId,
+    container = chatBox
+) {
 
     const message =
         document.createElement("div");
@@ -394,7 +398,7 @@ else {
     }
 
 
-    chatBox.appendChild(message);
+    container.appendChild(message);
 
 
     // ==============================
@@ -809,76 +813,90 @@ function cancelReply() {
 // ==============================
 
 function startListening() {
+    onSnapshot(messagesQuery, (snapshot) => {
+        const isFirstLoad = !chatBox.dataset.initialized;
 
-    onSnapshot(
-        messagesQuery,
-        (snapshot) => {
+        // ==============================
+        // FIRST LOAD (INSTANT JUMP)
+        // ==============================
+        if (isFirstLoad) {
+            // 1. Use DocumentFragment to batch DOM inserts into a single repaint
+            const fragment = document.createDocumentFragment();
 
-            chatBox.innerHTML = "";
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
 
+                renderMessage(data, docSnap.id, fragment);
 
-            snapshot.forEach(
-                async (docSnap) => {
+                // Mark unread messages asynchronously
+                if (!isMyMessage(data)) {
+                    const seenBy = data.seenBy || [];
+                    if (!seenBy.includes(currentUser)) {
+                        updateDoc(docSnap.ref, {
+                            seenBy: arrayUnion(currentUser)
+                        }).catch(error => console.error("Failed to mark message as seen:", error));
+                    }
+                }
+            });
 
-                    const data =
-                        docSnap.data();
+            // 2. Insert all messages at once
+            chatBox.appendChild(fragment);
 
-                    renderMessage(
-                        data,
-                        docSnap.id
-                    );
+            // 3. Force instant jump to bottom (disable smooth animation for initial load)
+            const originalScrollBehavior = chatBox.style.scrollBehavior;
+            chatBox.style.scrollBehavior = "auto";
+            chatBox.scrollTop = chatBox.scrollHeight;
+            chatBox.style.scrollBehavior = originalScrollBehavior;
 
+            // 4. Adjust scroll automatically as images finish loading
+            const images = chatBox.querySelectorAll("img.chat-photo");
+            images.forEach(img => {
+                if (!img.complete) {
+                    img.addEventListener("load", () => {
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }, { once: true });
+                }
+            });
 
-                    // ==============================
-                    // MARK OTHER PERSON'S MESSAGE
-                    // AS SEEN
-                    // ==============================
+            chatBox.dataset.initialized = "true";
+            return;
+        }
 
-                    if (
-                        !isMyMessage(data)
-                    ) {
+        // ==============================
+        // LATER FIRESTORE CHANGES
+        // ==============================
+        snapshot.docChanges().forEach(async (change) => {
+            if (change.type === "added") {
+                const data = change.doc.data();
 
-                        const seenBy =
-                            data.seenBy || [];
+                if (!document.querySelector(`[data-message-id="${change.doc.id}"]`)) {
+                    const wasNearBottom =
+                        chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight < 120;
 
+                    renderMessage(data, change.doc.id);
 
-                        if (
-                            !seenBy.includes(
-                                currentUser
-                            )
-                        ) {
+                    if (wasNearBottom) {
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }
+                }
 
-                            try {
-
-                                await updateDoc(
-                                    docSnap.ref,
-                                    {
-                                        seenBy:
-                                            arrayUnion(
-                                                currentUser
-                                            )
-                                    }
-                                );
-
-                            }
-                            catch (error) {
-
-                                console.error(
-                                    "Failed to mark message as seen:",
-                                    error
-                                );
-                            }
+                if (!isMyMessage(data)) {
+                    const seenBy = data.seenBy || [];
+                    if (!seenBy.includes(currentUser)) {
+                        try {
+                            await updateDoc(change.doc.ref, {
+                                seenBy: arrayUnion(currentUser)
+                            });
+                        } catch (error) {
+                            console.error("Failed to mark message as seen:", error);
                         }
                     }
                 }
-            );
-
-
-            chatBox.scrollTop =
-                chatBox.scrollHeight;
-        }
-    );
+            }
+        });
+    });
 }
+
 
 
 // ==============================
