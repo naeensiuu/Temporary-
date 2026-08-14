@@ -869,6 +869,8 @@ function startListening() {
             if (change.type === "added") {
                 const data = change.doc.data();
 
+
+
                 if (!document.querySelector(`[data-message-id="${change.doc.id}"]`)) {
                     const wasNearBottom =
                         chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight < 120;
@@ -893,10 +895,60 @@ function startListening() {
                     }
                 }
             }
+
+
+            if (change.type === "modified") {
+
+                const data =
+                    change.doc.data();
+
+
+                if (isMyMessage(data)) {
+
+                    const messageElement =
+                        document.querySelector(
+                            `[data-message-id="${change.doc.id}"]`
+                        );
+
+
+                    if (!messageElement) {
+                        return;
+                    }
+
+
+                    const seenStatus =
+                        messageElement.querySelector(
+                            ".seen-status"
+                        );
+
+
+                    if (!seenStatus) {
+                        return;
+                    }
+
+
+                    if (
+                        data.seenBy &&
+                        data.seenBy.length > 1
+                    ) {
+
+                        seenStatus.textContent =
+                            "✓✓ Seen";
+
+                    }
+                    else {
+
+                        seenStatus.textContent =
+                            "✓";
+
+                    }
+
+                }
+
+            }
         });
     });
 }
-
 
 
 // ==============================
