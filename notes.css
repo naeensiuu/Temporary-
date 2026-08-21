@@ -1885,3 +1885,132 @@ body {
 
     text-align: center;
 }
+
+
+
+/* =========================================
+   CHAT BUBBLE VIDEO PREVIEW
+   ========================================= */
+
+.chat-video-container {
+    position: relative;
+    width: 260px;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+}
+
+.chat-video-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.chat-video-expand-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+@media (max-width: 500px) {
+    .chat-video-container {
+        width: 100%;
+        min-width: 210px;
+        height: 150px;
+    }
+}
+
+/* =========================================
+   FULLSCREEN VIDEO MODAL (NO STACKED BUTTONS)
+   ========================================= */
+
+.video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.95);
+    padding: 0;
+}
+
+/* Gives Google Drive enough width so controls don't stack */
+.video-modal-frame {
+    width: 100vw;
+    height: 80vh;
+    max-width: 1000px;
+    border: none;
+    background: #000;
+}
+
+.video-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 26px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 1000000;
+}
+
+
+/* =========================
+   AUDIO MESSAGE
+   ========================= */
+
+.chat-audio {
+    width: 100%;
+    height: 80px;
+    border: none;
+    border-radius: 16px;
+    display: block;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+/* Audio message bubble */
+.message-bubble:has(.chat-audio) {
+    width: min(360px, 82vw);
+    padding: 8px;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+/* On smaller phones */
+@media (max-width: 600px) {
+
+    .chat-audio {
+        height: 72px;
+    }
+
+    .message-bubble:has(.chat-audio) {
+        width: 78vw;
+        padding: 7px;
+        border-radius: 17px;
+    }
+}
+
+
+
+
+
+
+
