@@ -50,6 +50,8 @@ const sendButton =
     document.getElementById("sendButton");
 const imageInput =
     document.getElementById("imageInput");
+const cameraInput =
+    document.getElementById("cameraInput");
 
 const rishaBtn =
     document.getElementById("rishaBtn");
@@ -279,22 +281,20 @@ if (
         document.createElement("img");
 
     image.src =
-    data.photoThumbnail ||
-    data.photoUrl;
+        data.photoThumbnail ||
+        data.photoUrl;
 
     image.alt =
         data.fileName ||
         "Photo";
 
- image.className =
+    image.className =
         "chat-photo";
 
-
-   image.loading =
+    image.loading =
         "lazy";
 
-
-image.addEventListener(
+    image.addEventListener(
         "click",
         () => {
 
@@ -306,12 +306,101 @@ image.addEventListener(
         }
     );
 
-
     bubble.appendChild(
         image
     );
 
 }
+else if (
+    data.mimeType &&
+    data.mimeType.startsWith("audio/") &&
+    data.fileId
+) {
+
+    const audio =
+        document.createElement("iframe");
+
+    audio.src =
+        "https://drive.google.com/file/d/" +
+        data.fileId +
+        "/preview";
+
+    audio.allow =
+        "autoplay";
+
+    audio.frameBorder =
+        "0";
+
+    audio.style.width =
+        "100%";
+
+    audio.style.height =
+        "80px";
+
+    bubble.appendChild(
+        audio
+    );
+
+}
+
+
+
+
+
+
+
+// Render Video Message in Chat
+else if (
+    (data.type === "video" || (data.mimeType && data.mimeType.startsWith("video/"))) &&
+    data.fileId
+) {
+
+    const videoWrapper = document.createElement("div");
+    videoWrapper.className = "chat-video-container";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://drive.google.com/file/d/" + data.fileId + "/preview";
+    iframe.className = "chat-video-iframe";
+    iframe.frameBorder = "0";
+
+    const expandBtn = document.createElement("button");
+    expandBtn.className = "chat-video-expand-btn";
+    expandBtn.innerHTML = "⛶ Fullscreen";
+    expandBtn.type = "button";
+
+    expandBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openVideoModal(data.fileId);
+    });
+
+    videoWrapper.appendChild(iframe);
+    videoWrapper.appendChild(expandBtn);
+    bubble.appendChild(videoWrapper);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 else {
 
     bubble.textContent =
@@ -951,939 +1040,11 @@ function startListening() {
 }
 
 
-// ==============================
-// ONLINE / LAST ACTIVE
-// ==============================
 
-let presenceUser = "";
 
 
-function setupPresence(name) {
 
-    presenceUser =
-        name.toLowerCase();
 
 
-    const presenceRef =
-        ref(
-            rtdb,
-            "presence/" +
-            presenceUser
-        );
-
-
-    const connectedRef =
-        ref(
-            rtdb,
-            ".info/connected"
-        );
-
-
-    onValue(
-        connectedRef,
-        (snapshot) => {
-
-            if (
-                snapshot.val() !== true
-            ) {
-
-                return;
-            }
-
-
-            onDisconnect(
-                presenceRef
-            ).set({
-
-                online: false,
-
-                lastActive:
-                    rtdbServerTimestamp()
-
-            });
-
-
-            set(
-                presenceRef,
-                {
-
-                    online: true,
-
-                    lastActive:
-                        rtdbServerTimestamp()
-
-                }
-            );
-        }
-    );
-
-
-    // ==============================
-    // WATCH OTHER PERSON
-    // ==============================
-
-    const otherUser =
-        name.toLowerCase() === "naeen"
-            ? "risha"
-            : "naeen";
-
-
-    const otherPresenceRef =
-        ref(
-            rtdb,
-            "presence/" +
-            otherUser
-        );
-
-
-    onValue(
-        otherPresenceRef,
-        (snapshot) => {
-
-            const data =
-                snapshot.val();
-
-
-            if (!data) {
-
-                presenceStatus.textContent =
-                    "⚪ " +
-                    otherUser +
-                    " is offline";
-
-                return;
-            }
-
-
-            if (
-                data.online === true
-            ) {
-
-                presenceStatus.textContent =
-                    "🟢 " +
-                    capitalize(
-                        otherUser
-                    ) +
-                    " is online";
-
-            }
-            else if (
-                data.lastActive
-            ) {
-
-                presenceStatus.textContent =
-                    "⚪ " +
-                    capitalize(
-                        otherUser
-                    ) +
-                    " was active " +
-                    formatLastActive(
-                        data.lastActive
-                    );
-            }
-        }
-    );
-}
-
-
-// ==============================
-// PRESENCE HELPERS
-// ==============================
-
-function capitalize(name) {
-
-    return (
-        name.charAt(0).toUpperCase() +
-        name.slice(1)
-    );
-}
-
-
-function formatLastActive(timestamp) {
-
-    const now =
-        Date.now();
-
-    const difference =
-        now - timestamp;
-
-    const seconds =
-        Math.floor(
-            difference / 1000
-        );
-
-
-    if (seconds < 60) {
-
-        return "just now";
-    }
-
-
-    const minutes =
-        Math.floor(
-            seconds / 60
-        );
-
-
-    if (minutes < 60) {
-
-        return minutes === 1
-            ? "1 minute ago"
-            : minutes + " minutes ago";
-    }
-
-
-    const hours =
-        Math.floor(
-            minutes / 60
-        );
-
-
-    if (hours < 24) {
-
-        return hours === 1
-            ? "1 hour ago"
-            : hours + " hours ago";
-    }
-
-
-    const days =
-        Math.floor(
-            hours / 24
-        );
-
-
-    if (days === 1) {
-
-        return "yesterday";
-    }
-
-
-    if (days < 7) {
-
-        return days +
-            " days ago";
-    }
-
-
-    return new Date(
-        timestamp
-    ).toLocaleDateString(
-        [],
-        {
-            month: "short",
-            day: "numeric"
-        }
-    );
-}
-
-
-// ==============================
-// SEND MESSAGE
-// ==============================
-
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-async function sendMessage() {
-
-    const text =
-        messageInput.value.trim();
-
-
-    if (text === "") {
-
-        return;
-    }
-
-
-    try {
-
-        const messageData = {
-
-            sender:
-                currentUser,
-
-            text:
-                text,
-
-            time:
-                serverTimestamp(),
-
-            seenBy:
-                [currentUser]
-        };
-
-
-        /*
-           If we're replying to a message,
-           save the original message
-           information inside this message.
-        */
-
-        if (replyingTo) {
-
-            messageData.replyTo = {
-
-                id:
-                    replyingTo.id,
-
-                sender:
-                    replyingTo.sender,
-
-                text:
-                    replyingTo.text
-            };
-        }
-
-
-        await addDoc(
-            messagesRef,
-            messageData
-        );
-
-
-        messageInput.value = "";
-
-        messageInput.style.height =
-            "auto";
-
-
-        /*
-           Clear the reply after
-           successfully sending.
-        */
-
-        cancelReply();
-
-
-        messageInput.focus();
-
-    }
-    catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Failed to send message."
-        );
-    }
-}
-
-
-// ==============================
-// AUTO GROW TEXTAREA
-// ==============================
-
-messageInput.addEventListener(
-    "input",
-    () => {
-
-        messageInput.style.height =
-            "auto";
-
-        messageInput.style.height =
-            messageInput.scrollHeight +
-            "px";
-    }
-);
-
-
-
-
-// =========================================================
-// PHOTO UPLOAD
-// =========================================================
-
-
-
-
-
-
-
-
-
-imageInput.addEventListener(
-    "change",
-    handlePhotoSelected
-);
-
-
-async function handlePhotoSelected(event) {
-
-    const file =
-        event.target.files[0];
-
-    if (!file) {
-        return;
-    }
-
-
-    try {
-
-        console.log(
-            "Photo selected:",
-            file.name
-        );
-
-
-        await uploadPhoto(
-            file
-        );
-
-
-    }
-    catch (error) {
-
-        console.error(
-            "Photo upload failed:",
-            error
-        );
-
-        alert(
-            "Failed to send photo."
-        );
-
-    }
-
-
-    /*
-       Reset the input.
-
-       This allows the same photo
-       to be selected again later.
-    */
-
-    imageInput.value = "";
-}
-
-
-async function uploadPhoto(file) {
-
-    /*
-       Convert the image into Base64.
-    */
-
-    const base64 =
-        await fileToBase64(file);
-
-
-    /*
-       Remove the Data URL prefix.
-
-       Example:
-
-       data:image/jpeg;base64,/9j/4AAQ...
-
-       becomes:
-
-       /9j/4AAQ...
-    */
-
-    const cleanBase64 =
-        base64.split(",")[1];
-
-
-    const uploadData = {
-
-        base64:
-            cleanBase64,
-
-        mimeType:
-            file.type,
-
-        fileName:
-            file.name
-    };
-
-
-    console.log(
-        "Uploading photo..."
-    );
-
-
-    const response =
-        await fetch(
-            PHOTO_UPLOAD_URL,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
-
-                body:
-                    JSON.stringify(
-                        uploadData
-                    )
-            }
-        );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            "Upload request failed: " +
-            response.status
-        );
-    }
-
-
-    const result =
-        await response.json();
-
-
-    console.log(
-        "Upload response:",
-        result
-    );
-
-
-    if (!result.success) {
-
-        throw new Error(
-            result.error ||
-            "Google Drive upload failed."
-        );
-    }
-
-
-    /*
-       The photo is now in Drive.
-
-       Now create the chat message.
-    */
-
-    await addPhotoMessage(
-    result.thumbnailUrl,
-    result.fileUrl,
-    file.name
-);
-}
-
-
-
-function fileToBase64(file) {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                () => {
-
-                    resolve(
-                        reader.result
-                    );
-
-                };
-
-
-            reader.onerror =
-                reject;
-
-
-            reader.readAsDataURL(
-                file
-            );
-        }
-    );
-}
-
-
-
-async function addPhotoMessage(
-    thumbnailUrl,
-    photoUrl,
-    fileName
-) {
-
-    const messageData = {
-
-        sender:
-            currentUser,
-
-        text:
-            "",
-
-        type:
-            "photo",
-
-        photoUrl:
-    photoUrl,
-
-photoThumbnail:
-    thumbnailUrl,
-
-        fileName:
-            fileName,
-
-        time:
-            serverTimestamp(),
-
-        seenBy:
-            [currentUser]
-    };
-
-
-    /*
-       If the photo is being sent
-       as a reply, preserve the reply.
-    */
-
-    if (replyingTo) {
-
-        messageData.replyTo = {
-
-            id:
-                replyingTo.id,
-
-            sender:
-                replyingTo.sender,
-
-            text:
-                replyingTo.text
-        };
-    }
-
-
-    await addDoc(
-        messagesRef,
-        messageData
-    );
-
-
-    /*
-       Clear reply mode after sending.
-    */
-
-    cancelReply();
-
-
-    messageInput.focus();
-}
-
-// =========================================================
-// SECRET GARDEN TOUCH EFFECT
-// =========================================================
-
-// =========================================================
-// SECRET GARDEN TOUCH EFFECT
-// =========================================================
-
-const gardenParticles = [
-    "🌸",
-    "🌿",
-    "🍃",
-    "✨",
-    "✿",
-    "❀",
-    "🌺"
-];
-
-
-// =========================================================
-// CREATE GARDEN PARTICLE
-// =========================================================
-
-function createGardenParticle(
-    x,
-    y,
-    burst = false
-) {
-
-    const particle =
-        document.createElement("span");
-
-    particle.className =
-        "touch-particle";
-
-
-    particle.textContent =
-        gardenParticles[
-            Math.floor(
-                Math.random() *
-                gardenParticles.length
-            )
-        ];
-
-
-    particle.style.left =
-        x + "px";
-
-    particle.style.top =
-        y + "px";
-
-
-    /*
-       Normal tap:
-       small gentle movement.
-
-       Swipe burst:
-       slightly larger spread.
-    */
-
-    const moveX =
-        burst
-            ? (Math.random() - 0.5) * 80
-            : (Math.random() - 0.5) * 55;
-
-
-    const moveY =
-        burst
-            ? -15 - Math.random() * 65
-            : -20 - Math.random() * 45;
-
-
-    const rotation =
-        (Math.random() - 0.5) * 100;
-
-
-    particle.style.setProperty(
-        "--move-x",
-        moveX + "px"
-    );
-
-    particle.style.setProperty(
-        "--move-y",
-        moveY + "px"
-    );
-
-    particle.style.setProperty(
-        "--rotation",
-        rotation + "deg"
-    );
-
-
-    /*
-       Make the burst particles
-       slightly more noticeable.
-    */
-
-    if (burst) {
-
-        particle.style.fontSize =
-            (16 + Math.random() * 7) +
-            "px";
-
-    }
-
-
-    document.body.appendChild(
-        particle
-    );
-
-
-    setTimeout(() => {
-
-        particle.remove();
-
-    }, 800);
-}
-
-
-// =========================================================
-// NORMAL TAP
-// =========================================================
-
-document.addEventListener(
-    "pointerdown",
-    (event) => {
-
-        /*
-           Don't create particles when
-           touching the text input.
-        */
-
-        if (
-            event.target.closest("textarea") ||
-            event.target.closest("input")
-        ) {
-
-            return;
-        }
-
-
-        createGardenParticle(
-            event.clientX,
-            event.clientY,
-            false
-        );
-
-    }
-);
-
-
-// =========================================================
-// SWIPE-TO-REPLY BURST
-// =========================================================
-
-function createReplyBurst(
-    messageElement
-) {
-
-    const rect =
-        messageElement.getBoundingClientRect();
-
-
-    /*
-       Start the burst near the middle
-       of the message being swiped.
-    */
-
-    const centerX =
-        rect.left +
-        rect.width / 2;
-
-
-    const centerY =
-        rect.top +
-        rect.height / 2;
-
-
-    /*
-       Four particles with slightly
-       different starting positions.
-    */
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const offsetX =
-            (Math.random() - 0.5) * 35;
-
-        const offsetY =
-            (Math.random() - 0.5) * 20;
-
-
-        /*
-           Tiny stagger makes the burst
-           feel more organic.
-        */
-
-        setTimeout(() => {
-
-            createGardenParticle(
-                centerX + offsetX,
-                centerY + offsetY,
-                true
-            );
-
-        }, i * 20);
-    }
-}
-
-// =========================================================
-// FULLSCREEN PHOTO VIEWER
-// =========================================================
-
-const photoViewer =
-    document.createElement("div");
-
-photoViewer.className =
-    "photo-viewer";
-
-
-const photoViewerImage =
-    document.createElement("img");
-
-
-const photoViewerClose =
-    document.createElement("button");
-
-photoViewerClose.className =
-    "photo-viewer-close";
-
-photoViewerClose.textContent =
-    "×";
-
-
-photoViewer.appendChild(
-    photoViewerImage
-);
-
-photoViewer.appendChild(
-    photoViewerClose
-);
-
-document.body.appendChild(
-    photoViewer
-);
-
-
-// Open fullscreen viewer
-// =========================================================
-// OPEN CHAT PHOTOS INSIDE WEBSITE ONLY
-// =========================================================
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const image =
-            event.target.closest(
-                "#chatBox img"
-            );
-
-        if (!image) return;
-
-
-        // STOP the original image/link action
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-
-
-        // Open our own viewer
-        photoViewerImage.src =
-            image.src;
-
-        photoViewer.style.display =
-            "flex";
-
-    },
-    true
-);
-
-
-// Close viewer
-photoViewerClose.addEventListener(
-    "click",
-    () => {
-
-        photoViewer.style.display =
-            "none";
-
-        photoViewerImage.src =
-            "";
-    }
-);
-
-
-// Tap outside the photo to close
-photoViewer.addEventListener(
-    "click",
-    (event) => {
-
-        if (
-            event.target === photoViewer
-        ) {
-
-            photoViewer.style.display =
-                "none";
-
-            photoViewerImage.src =
-                "";
-        }
-    }
-);
+// Video Fullscreen Modal Setup (Google Drive Preview Frame)
+const videoModal = document.createElemen
