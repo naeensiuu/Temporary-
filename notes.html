@@ -68,16 +68,23 @@ if (!access || Date.now() > Number(access)) {
     <footer class="input-area">
 
         <label class="image-button">
+    🖼️
+    <input
+        type="file"
+        id="imageInput"
+        accept="*/*"
+        hidden>
+</label>
 
-            📷
-
-            <input
-                type="file"
-                id="imageInput"
-                accept="image/*"
-                hidden>
-
-        </label>
+<label class="image-button">
+    📷
+    <input
+        type="file"
+        id="cameraInput"
+        accept="image/*"
+        capture="environment"
+        hidden>
+</label>
 
         <textarea
             id="messageInput"
