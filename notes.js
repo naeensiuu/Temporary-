@@ -1768,7 +1768,84 @@ function fileToBase64(file) {
     );
 }
 
+async function addPhotoMessage(
+    thumbnailUrl,
+    photoUrl,
+    fileName,
+    fileId,
+    mimeType
+) {
 
+    const messageData = {
+
+        sender:
+            currentUser,
+
+        text:
+            "",
+
+        type:
+            "photo",
+
+        photoUrl:
+            photoUrl,
+
+        photoThumbnail:
+            thumbnailUrl,
+
+        fileName:
+            fileName,
+
+        fileId:
+            fileId,
+
+        mimeType:
+            mimeType,
+
+        time:
+            serverTimestamp(),
+
+        seenBy:
+            [currentUser]
+    };
+
+
+    /*
+       If the photo is being sent
+       as a reply, preserve the reply.
+    */
+
+    if (replyingTo) {
+
+        messageData.replyTo = {
+
+            id:
+                replyingTo.id,
+
+            sender:
+                replyingTo.sender,
+
+            text:
+                replyingTo.text
+        };
+    }
+
+
+    await addDoc(
+        messagesRef,
+        messageData
+    );
+
+
+    /*
+       Clear reply mode after sending.
+    */
+
+    cancelReply();
+
+
+    messageInput.focus();
+}
 
 async function addMediaMessage(
     mediaUrl,
