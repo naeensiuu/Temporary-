@@ -351,17 +351,20 @@ else if (
 
 // Render Video Message in Chat
 else if (
-    (data.type === "video" || (data.mimeType && data.mimeType.startsWith("video/"))) &&
-    data.fileId
+    data.type === "video" || (data.mimeType && data.mimeType.startsWith("video/"))
 ) {
 
     const videoWrapper = document.createElement("div");
     videoWrapper.className = "chat-video-container";
 
-    const iframe = document.createElement("iframe");
-    iframe.src = "https://drive.google.com/file/d/" + data.fileId + "/preview";
-    iframe.className = "chat-video-iframe";
-    iframe.frameBorder = "0";
+    const video = document.createElement("video");
+    video.className = "chat-video";
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+
+    const videoUrl = getVideoUrl(data);
+    video.src = videoUrl;
 
     const expandBtn = document.createElement("button");
     expandBtn.className = "chat-video-expand-btn";
@@ -370,10 +373,10 @@ else if (
 
     expandBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        openVideoModal(data.fileId);
+        openVideoModal(videoUrl, video.currentTime);
     });
 
-    videoWrapper.appendChild(iframe);
+    videoWrapper.appendChild(video);
     videoWrapper.appendChild(expandBtn);
     bubble.appendChild(videoWrapper);
 
@@ -1046,7 +1049,17 @@ function startListening() {
 
 
 
-// Video Fullscreen Modal Setup (Google Drive Preview Frame)
+function getVideoUrl(data) {
+    if (data.mediaUrl && !data.mediaUrl.includes("drive.google.com/file/d/")) {
+        return data.mediaUrl;
+    }
+    if (data.fileId) {
+        return "https://drive.google.com/uc?export=download&id=" + data.fileId;
+    }
+    return data.mediaUrl || "";
+}
+
+// Video Fullscreen Modal Setup (Native Video Element)
 const videoModal = document.createElement("div");
 videoModal.className = "video-modal";
 
@@ -1054,22 +1067,29 @@ const videoModalClose = document.createElement("button");
 videoModalClose.className = "video-modal-close";
 videoModalClose.textContent = "×";
 
-const videoModalFrame = document.createElement("iframe");
-videoModalFrame.className = "video-modal-frame";
-videoModalFrame.frameBorder = "0";
+const videoModalElement = document.createElement("video");
+videoModalElement.className = "video-modal-element";
+videoModalElement.controls = true;
+videoModalElement.playsInline = true;
+videoModalElement.autoplay = true;
 
-videoModal.appendChild(videoModalFrame);
+videoModal.appendChild(videoModalElement);
 videoModal.appendChild(videoModalClose);
 document.body.appendChild(videoModal);
 
-function openVideoModal(fileId) {
-    videoModalFrame.src = "https://drive.google.com/file/d/" + fileId + "/preview";
+function openVideoModal(videoUrl, startTime = 0) {
+    videoModalElement.src = videoUrl;
+    if (startTime > 0) {
+        videoModalElement.currentTime = startTime;
+    }
     videoModal.style.display = "flex";
+    videoModalElement.play().catch(() => {});
 }
 
 function closeVideoModal() {
     videoModal.style.display = "none";
-    videoModalFrame.src = ""; // Clear src to stop video audio completely
+    videoModalElement.pause();
+    videoModalElement.src = ""; // Clear src to stop video audio completely
 }
 
 videoModalClose.addEventListener("click", closeVideoModal);
