@@ -1459,6 +1459,13 @@ imageInput.addEventListener(
     handlePhotoSelected
 );
 
+cameraInput.addEventListener(
+    "change",
+    handlePhotoSelected
+);
+
+
+
 
 async function handlePhotoSelected(event) {
 
