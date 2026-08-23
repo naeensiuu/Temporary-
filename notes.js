@@ -1054,7 +1054,7 @@ function getVideoUrl(data) {
         return data.mediaUrl;
     }
     if (data.fileId) {
-        return "https://drive.google.com/uc?export=download&id=" + data.fileId;
+        return "https://lh3.googleusercontent.com/d/" + data.fileId;
     }
     return data.mediaUrl || "";
 }
