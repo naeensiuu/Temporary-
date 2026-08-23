@@ -437,7 +437,7 @@ button{
    BOOK 20 SPECIAL
 ========================================== */
 
-.speccial-book{
+.special-book{
 
     border:3px solid #c89b4f;
 
@@ -445,7 +445,7 @@ button{
 
 }
 
-.speccial-book::before{
+.special-book::before{
 
     content:"★";
 
