@@ -357,16 +357,16 @@ else if (
     const videoWrapper = document.createElement("div");
     videoWrapper.className = "chat-video-container";
 
-    const video = document.createElement("video");
-    video.className = "chat-video";
-    video.controls = true;
-    video.playsInline = true;
+    const iframe = document.createElement("iframe");
+    iframe.className = "chat-video-iframe";
+    iframe.frameBorder = "0";
+    iframe.allow = "autoplay; encrypted-media";
 
     const videoSrc = data.fileId
-        ? "https://lh3.googleusercontent.com/d/" + data.fileId
+        ? "https://drive.google.com/file/d/" + data.fileId + "/preview"
         : data.mediaUrl;
 
-    video.src = videoSrc;
+    iframe.src = videoSrc;
 
     const expandBtn = document.createElement("button");
     expandBtn.className = "chat-video-expand-btn";
@@ -378,7 +378,7 @@ else if (
         openVideoModal(videoSrc);
     });
 
-    videoWrapper.appendChild(video);
+    videoWrapper.appendChild(iframe);
     videoWrapper.appendChild(expandBtn);
     bubble.appendChild(videoWrapper);
 
@@ -1059,25 +1059,23 @@ const videoModalClose = document.createElement("button");
 videoModalClose.className = "video-modal-close";
 videoModalClose.textContent = "×";
 
-const videoModalElement = document.createElement("video");
-videoModalElement.className = "video-modal-element";
-videoModalElement.controls = true;
-videoModalElement.playsInline = true;
+const videoModalFrame = document.createElement("iframe");
+videoModalFrame.className = "video-modal-frame";
+videoModalFrame.frameBorder = "0";
+videoModalFrame.allow = "autoplay; encrypted-media";
 
-videoModal.appendChild(videoModalElement);
+videoModal.appendChild(videoModalFrame);
 videoModal.appendChild(videoModalClose);
 document.body.appendChild(videoModal);
 
 function openVideoModal(source) {
-    videoModalElement.src = source;
+    videoModalFrame.src = source;
     videoModal.style.display = "flex";
-    videoModalElement.play().catch(() => {});
 }
 
 function closeVideoModal() {
     videoModal.style.display = "none";
-    videoModalElement.pause();
-    videoModalElement.src = "";
+    videoModalFrame.src = "";
 }
 
 videoModalClose.addEventListener("click", closeVideoModal);
