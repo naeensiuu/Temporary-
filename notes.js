@@ -357,27 +357,45 @@ else if (
     const videoWrapper = document.createElement("div");
     videoWrapper.className = "chat-video-container";
 
-    const video = document.createElement("video");
-    video.className = "chat-video";
-    video.controls = true;
-    video.playsInline = true;
-    video.preload = "metadata";
+    if (data.fileId) {
+        const iframe = document.createElement("iframe");
+        iframe.src = "https://drive.google.com/file/d/" + data.fileId + "/preview";
+        iframe.className = "chat-video-iframe";
+        iframe.frameBorder = "0";
+        iframe.allow = "autoplay";
 
-    const videoUrl = getVideoUrl(data);
-    video.src = videoUrl;
+        const expandBtn = document.createElement("button");
+        expandBtn.className = "chat-video-expand-btn";
+        expandBtn.innerHTML = "⛶ Fullscreen";
+        expandBtn.type = "button";
 
-    const expandBtn = document.createElement("button");
-    expandBtn.className = "chat-video-expand-btn";
-    expandBtn.innerHTML = "⛶ Fullscreen";
-    expandBtn.type = "button";
+        expandBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openVideoModal(data.fileId, false);
+        });
 
-    expandBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openVideoModal(videoUrl, video.currentTime);
-    });
+        videoWrapper.appendChild(iframe);
+        videoWrapper.appendChild(expandBtn);
+    } else if (data.mediaUrl) {
+        const video = document.createElement("video");
+        video.className = "chat-video";
+        video.controls = true;
+        video.playsInline = true;
+        video.src = data.mediaUrl;
 
-    videoWrapper.appendChild(video);
-    videoWrapper.appendChild(expandBtn);
+        const expandBtn = document.createElement("button");
+        expandBtn.className = "chat-video-expand-btn";
+        expandBtn.innerHTML = "⛶ Fullscreen";
+        expandBtn.type = "button";
+
+        expandBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openVideoModal(data.mediaUrl, true);
+        });
+
+        videoWrapper.appendChild(video);
+        videoWrapper.appendChild(expandBtn);
+    }
     bubble.appendChild(videoWrapper);
 
 }
@@ -1049,17 +1067,7 @@ function startListening() {
 
 
 
-function getVideoUrl(data) {
-    if (data.mediaUrl && !data.mediaUrl.includes("drive.google.com/file/d/")) {
-        return data.mediaUrl;
-    }
-    if (data.fileId) {
-        return "https://lh3.googleusercontent.com/d/" + data.fileId;
-    }
-    return data.mediaUrl || "";
-}
-
-// Video Fullscreen Modal Setup (Native Video Element)
+// Video Fullscreen Modal Setup
 const videoModal = document.createElement("div");
 videoModal.className = "video-modal";
 
@@ -1067,29 +1075,43 @@ const videoModalClose = document.createElement("button");
 videoModalClose.className = "video-modal-close";
 videoModalClose.textContent = "×";
 
+const videoModalFrame = document.createElement("iframe");
+videoModalFrame.className = "video-modal-frame";
+videoModalFrame.frameBorder = "0";
+videoModalFrame.allow = "autoplay";
+
 const videoModalElement = document.createElement("video");
 videoModalElement.className = "video-modal-element";
 videoModalElement.controls = true;
 videoModalElement.playsInline = true;
-videoModalElement.autoplay = true;
 
+videoModal.appendChild(videoModalFrame);
 videoModal.appendChild(videoModalElement);
 videoModal.appendChild(videoModalClose);
 document.body.appendChild(videoModal);
 
-function openVideoModal(videoUrl, startTime = 0) {
-    videoModalElement.src = videoUrl;
-    if (startTime > 0) {
-        videoModalElement.currentTime = startTime;
+function openVideoModal(source, isDirectUrl = false) {
+    if (isDirectUrl) {
+        videoModalFrame.style.display = "none";
+        videoModalFrame.src = "";
+        videoModalElement.style.display = "block";
+        videoModalElement.src = source;
+        videoModalElement.play().catch(() => {});
+    } else {
+        videoModalElement.style.display = "none";
+        videoModalElement.pause();
+        videoModalElement.src = "";
+        videoModalFrame.style.display = "block";
+        videoModalFrame.src = "https://drive.google.com/file/d/" + source + "/preview";
     }
     videoModal.style.display = "flex";
-    videoModalElement.play().catch(() => {});
 }
 
 function closeVideoModal() {
     videoModal.style.display = "none";
+    videoModalFrame.src = "";
     videoModalElement.pause();
-    videoModalElement.src = ""; // Clear src to stop video audio completely
+    videoModalElement.src = "";
 }
 
 videoModalClose.addEventListener("click", closeVideoModal);

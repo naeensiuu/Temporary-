@@ -1896,16 +1896,19 @@ body {
     position: relative;
     width: 100%;
     max-width: 280px;
+    height: 180px;
     border-radius: 12px;
     overflow: hidden;
     background: #000;
     box-shadow: 0 3px 12px rgba(0,0,0,0.35);
 }
 
+.chat-video-iframe,
 .chat-video {
     display: block;
     width: 100%;
-    max-height: 320px;
+    height: 100%;
+    border: 0;
     border-radius: 12px;
     outline: none;
     background: #000;
@@ -1936,6 +1939,7 @@ body {
     .chat-video-container {
         max-width: 100%;
         min-width: 210px;
+        height: 160px;
     }
 }
 
@@ -1952,6 +1956,15 @@ body {
     justify-content: center;
     background: rgba(0, 0, 0, 0.95);
     padding: 0;
+}
+
+.video-modal-frame {
+    width: 90vw;
+    height: 80vh;
+    max-width: 900px;
+    border: none;
+    border-radius: 12px;
+    background: #000;
 }
 
 .video-modal-element {
