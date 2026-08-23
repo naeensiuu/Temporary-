@@ -358,11 +358,16 @@ else if (
     videoWrapper.className = "chat-video-container";
 
     if (data.fileId) {
+        const iframeWrapper = document.createElement("div");
+        iframeWrapper.className = "chat-video-iframe-wrapper";
+
         const iframe = document.createElement("iframe");
         iframe.src = "https://drive.google.com/file/d/" + data.fileId + "/preview";
         iframe.className = "chat-video-iframe";
         iframe.frameBorder = "0";
         iframe.allow = "autoplay";
+
+        iframeWrapper.appendChild(iframe);
 
         const expandBtn = document.createElement("button");
         expandBtn.className = "chat-video-expand-btn";
@@ -374,7 +379,7 @@ else if (
             openVideoModal(data.fileId, false);
         });
 
-        videoWrapper.appendChild(iframe);
+        videoWrapper.appendChild(iframeWrapper);
         videoWrapper.appendChild(expandBtn);
     } else if (data.mediaUrl) {
         const video = document.createElement("video");
@@ -1075,24 +1080,29 @@ const videoModalClose = document.createElement("button");
 videoModalClose.className = "video-modal-close";
 videoModalClose.textContent = "×";
 
+const videoModalFrameContainer = document.createElement("div");
+videoModalFrameContainer.className = "video-modal-frame-container";
+
 const videoModalFrame = document.createElement("iframe");
 videoModalFrame.className = "video-modal-frame";
 videoModalFrame.frameBorder = "0";
 videoModalFrame.allow = "autoplay";
+
+videoModalFrameContainer.appendChild(videoModalFrame);
 
 const videoModalElement = document.createElement("video");
 videoModalElement.className = "video-modal-element";
 videoModalElement.controls = true;
 videoModalElement.playsInline = true;
 
-videoModal.appendChild(videoModalFrame);
+videoModal.appendChild(videoModalFrameContainer);
 videoModal.appendChild(videoModalElement);
 videoModal.appendChild(videoModalClose);
 document.body.appendChild(videoModal);
 
 function openVideoModal(source, isDirectUrl = false) {
     if (isDirectUrl) {
-        videoModalFrame.style.display = "none";
+        videoModalFrameContainer.style.display = "none";
         videoModalFrame.src = "";
         videoModalElement.style.display = "block";
         videoModalElement.src = source;
@@ -1101,7 +1111,7 @@ function openVideoModal(source, isDirectUrl = false) {
         videoModalElement.style.display = "none";
         videoModalElement.pause();
         videoModalElement.src = "";
-        videoModalFrame.style.display = "block";
+        videoModalFrameContainer.style.display = "block";
         videoModalFrame.src = "https://drive.google.com/file/d/" + source + "/preview";
     }
     videoModal.style.display = "flex";
