@@ -2090,7 +2090,7 @@ function createGardenParticle(
         particle.remove();
 
     }, 800);
-}
+} 
 
 
 // =========================================================
@@ -2301,7 +2301,7 @@ photoViewer.addEventListener(
 // and only changes a single small field in the database.
 // =========================================================
 
-const REACTION_EMOJIS = ["❤️", "😂"];
+const REACTION_EMOJIS = ["❤️", "😆","🤢","😡","🙁"];
 
 let reactionPicker = null;
 let pressTimer = null;
